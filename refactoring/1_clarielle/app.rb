@@ -1,3 +1,22 @@
+require_relative './item'
+require_relative './music'
+require_relative './genre'
+require_relative './io'
+require_relative './music_album_helper'
+require_relative './book'
+require_relative './label'
+# require_relative './book_info'
+require_relative './book_data'
+require_relative './game_actions'
+require_relative './app'
+require_relative './genre'
+require_relative './source'
+require_relative './author'
+require_relative './label'
+
+require 'json'
+require 'date'
+
 class App
   include MusicAlbumHelper
   include IOHelper
@@ -6,23 +25,25 @@ class App
   attr_accessor :music_albums, :genres
   attr_reader :books
 
-  def initialize
+  def initialize(input:, output:)
     @music_albums = read_file('./data/music_album.json', 'MusicAlbum')
     @genres = read_file('./data/genres.json', 'Genre')
     @game_actions = GameActions.new
     @books = []
     @labels = []
+    @input = input
+    @output = output
   end
 
   # Title of each option when executed
   def title(title)
-    puts "_____#{title.upcase}_____"
-    puts ''
+    @output.puts "_____#{title.upcase}_____"
+    @output.puts ''
   end
 
   # the user options
   def options_list
-    puts "\nPlease choose an option according to the numbers on the dashboard:
+    @output.puts "\nPlease choose an option according to the numbers on the dashboard:
     1# List all books
     2# List all music albums
     3# List of games
@@ -34,7 +55,7 @@ class App
     9# Add a game
     10# Exit"
 
-    choice = gets.chomp
+    choice = @input.gets.chomp
     selection(choice.to_i)
   end
 
@@ -57,26 +78,26 @@ class App
     @labels.clear
     book_data = BookData.new
     book_data.load_label(@labels)
-    puts "\nLabel list(#{@labels.length}):"
-    puts '---------------'
-    return puts 'No labels added yet!' if @labels.empty?
+    @output.puts "\nLabel list(#{@labels.length}):"
+    @output.puts '---------------'
+    return @output.puts 'No labels added yet!' if @labels.empty?
 
     @labels.each.with_index(1) do |label, index|
-      puts "#{index}. Title: #{label.title}, Color: #{label.color}"
+      @output.puts "#{index}. Title: #{label.title}, Color: #{label.color}"
     end
   end
 
   # add book
   def create_book
     book_data = BookData.new
-    puts 'Create book'
-    puts '-----------------'
-    puts 'Add the publisher name'
-    publisher = gets.chomp
-    puts 'Add the state of the cover "bad or good"'
-    cover_state = gets.chomp.downcase
-    puts 'The date of publishing dd/mm/yy'
-    publish_date = gets.chomp
+    @output.puts 'Create book'
+    @output.puts '-----------------'
+    @output.puts 'Add the publisher name'
+    publisher = @input.gets.chomp
+    @output.puts 'Add the state of the cover "bad or good"'
+    cover_state = @input.gets.chomp.downcase
+    @output.puts 'The date of publishing dd/mm/yy'
+    publish_date = @input.gets.chomp
     book = Book.new(publish_date, publisher, cover_state)
     label = add_label
     book.add_label(label)
@@ -86,7 +107,7 @@ class App
     @labels << label
     book_data.store_label(label)
     @labels.clear
-    puts 'Book added successfully'
+    @output.puts 'Book added successfully'
   end
 
   # list all books
@@ -94,27 +115,27 @@ class App
     @books.clear
     book_data = BookData.new
     book_data.load_book(@books, @labels)
-    puts 'book list in library'
-    puts "\nBook list(#{@books.length}):"
-    puts '--------------'
-    return puts 'No books added yet!' if @books.empty?
+    @output.puts 'book list in library'
+    @output.puts "\nBook list(#{@books.length}):"
+    @output.puts '--------------'
+    return @output.puts 'No books added yet!' if @books.empty?
 
     @books.each.with_index(1) do |book, index|
       publisher = "Publisher: #{book.publisher}, " unless book.publisher.nil?
       publish_date = "Publish date: #{book.publish_date}, " unless book.publish_date.nil?
       cover_state = "Cover state: #{book.cover_state}" unless book.cover_state.nil?
-      puts "#{index}. #{publisher}#{publish_date}#{cover_state}"
+      @output.puts "#{index}. #{publisher}#{publish_date}#{cover_state}"
     end
   end
 
   def add_label
     # add label
-    puts 'Assign a label to the book'
-    puts '-------------------------'
-    puts 'Give a title to the book'
-    title = gets.chomp
-    puts 'Assign a color to the book'
-    color = gets.chomp
+    @output.puts 'Assign a label to the book'
+    @output.puts '-------------------------'
+    @output.puts 'Give a title to the book'
+    title = @input.gets.chomp
+    @output.puts 'Assign a color to the book'
+    color = @input.gets.chomp
     Label.new(title, color)
   end
 
@@ -123,11 +144,11 @@ class App
     @music_albums = read_file('./data/music_album.json', 'MusicAlbum')
     title('list of music album')
     if @music_albums.empty?
-      puts 'No music album in the library'
+      @output.puts 'No music album in the library'
       nil
     else
       @music_albums.each_with_index do |music_album, index|
-        puts "#{index}- Music id: #{music_album.id} - is published on #{music_album.publish_date}"
+        @output.puts "#{index}- Music id: #{music_album.id} - is published on #{music_album.publish_date}"
       end
     end
   end
@@ -136,7 +157,7 @@ class App
   def list_genres
     @genres = read_file('./data/genres.json', 'Genre')
     title('list of genre')
-    @genres.each_with_index { |genre, index| puts "#{index} - #{genre.name}" }
+    @genres.each_with_index { |genre, index| @output.puts "#{index} - #{genre.name}" }
   end
 
   def add_music_album
@@ -152,7 +173,7 @@ class App
     add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
     @music_albums << new_music_album
     write_file(@music_albums, './data/music_album.json')
-    puts 'A music album is created successfully'
+    @output.puts 'A music album is created successfully'
   end
 
   # call create_game method from GameActions
@@ -174,7 +195,7 @@ class App
   def quit_app
     @game_actions.save_games
     @game_actions.save_authors
-    puts 'Thanks for using our app'
+    @output.puts 'Thanks for using our app'
     exit
   end
 

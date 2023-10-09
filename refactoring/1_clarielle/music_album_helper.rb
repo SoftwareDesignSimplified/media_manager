@@ -23,25 +23,25 @@ module MusicAlbumHelper
 
   # Handle user input
   def ask_on_spotify
-    print 'Is it on Spotify? (y/n) '
-    on_spotify_input = gets.chomp.downcase
+    @output.print 'Is it on Spotify? (y/n) '
+    on_spotify_input = @input.gets.chomp.downcase
     %w[y yes].include?(on_spotify_input)
   end
 
   def ask_publish_date
-    print 'What is the date of publication? (YYYY-MM-DD-) '
-    gets.chomp
+    @output.print 'What is the date of publication? (YYYY-MM-DD-) '
+    @input.gets.chomp
   end
 
   def ask_archived
-    print 'Is it archived? (y/n) '
-    archived_input = gets.chomp.downcase
+    @output.print 'Is it archived? (y/n) '
+    archived_input = @input.gets.chomp.downcase
     %w[y yes].include?(archived_input)
   end
 
   def ask_genre
-    print 'What is the genre of the music album? '
-    gets.chomp.capitalize
+    @output.print 'What is the genre of the music album? '
+    @input.gets.chomp.capitalize
   end
 
   # Handle the genre of the music album
