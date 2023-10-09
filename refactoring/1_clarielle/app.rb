@@ -45,7 +45,7 @@ class App
   end
 
   # Title of each option when executed
-  def title(title)
+  def print_prompt(title)
     @output.puts "_____#{title.upcase}_____"
     @output.puts ''
   end
@@ -151,7 +151,7 @@ class App
   # List all the existing music albums
   def list_music_album
     @music_albums = read_file_object(@music_album_store, 'MusicAlbum')
-    title('list of music album')
+    print_prompt('list of music album')
     if @music_albums.empty?
       @output.puts 'No music album in the library'
       nil
@@ -165,12 +165,12 @@ class App
   # List all the existing genres
   def list_genres
     @genres = read_file_object(@genres_store, 'Genre')
-    title('list of genre')
+    print_prompt('list of genre')
     @genres.each_with_index { |genre, index| @output.puts "#{index} - #{genre.name}" }
   end
 
   def add_music_album
-    title('add a music album')
+    print_prompt('add a music album')
     # Handle user input
     on_spotify = ask_on_spotify
     publish_date = ask_publish_date
