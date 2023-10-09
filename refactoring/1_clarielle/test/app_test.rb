@@ -41,10 +41,27 @@ Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it arc
 
     input = StringIO.new("2")
     output = StringIO.new
-    app = App.new(input: input, output: output)
+    app = App.new(input: input, output: output, music_album_store: music_album_store, genres_store: genres_store)
     app.start
     heading = "_____LIST OF MUSIC ALBUM_____"
     _menu, list_of_albums = output.string.split(heading)
     assert_equal 1, list_of_albums.strip.split("\n").count
+  end
+
+  it "when I add a music album in the genre of Rock and then list out all genres Rock should be in that list" do
+    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
+    output = StringIO.new
+    music_album_store = StringIO.new
+    genres_store = StringIO.new
+    app = App.new(input: input, output: output, music_album_store: music_album_store, genres_store: genres_store)
+    app.start
+
+    input = StringIO.new("4")
+    output = StringIO.new
+    app = App.new(input: input, output: output, music_album_store: music_album_store, genres_store: genres_store)
+    app.start
+    heading = "_____LIST OF GENRE_____"
+    _menu, list_of_genres = output.string.split(heading)
+    assert_equal 1, list_of_genres.strip.split("\n").count
   end
 end

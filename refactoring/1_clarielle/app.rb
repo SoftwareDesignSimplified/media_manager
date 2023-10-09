@@ -28,8 +28,8 @@ class App
   def initialize(
     input:,
     output:,
-    music_album_store: File.open('./data/music_album.json', 'r+'),
-    genres_store: File.open('./data/genres.json', 'r+')
+    music_album_store:,
+    genres_store:
   )
     @music_album_store = music_album_store
     @genres_store = genres_store
