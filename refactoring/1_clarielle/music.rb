@@ -1,13 +1,14 @@
 class MusicAlbum < Item
   attr_accessor :on_spotify, :publish_date
-  attr_reader :id, :archived
+  attr_reader :id, :archived, :name
 
   # @param {Boolean} on_spotify
   # @param {String} publish_date
   # @param {Boolean} archived
-  def initialize(on_spotify, publish_date, archived: false)
+  def initialize(on_spotify, publish_date, archived: false, name: "")
     super(publish_date, archived)
     @on_spotify = on_spotify
+    @name = name
   end
 
   # @override
@@ -24,7 +25,7 @@ class MusicAlbum < Item
   # convert the hash back to json
   def to_json(*args)
     super_attrs = JSON.parse(super(*args))
-    merged_attrs = super_attrs.merge({ on_spotify: @on_spotify })
+    merged_attrs = super_attrs.merge({ on_spotify: @on_spotify, name: @name })
     JSON.generate(merged_attrs)
   end
 
@@ -34,6 +35,6 @@ class MusicAlbum < Item
   # @return {MusicAlbum}
   def self.from_json(string)
     data = JSON.parse(string)
-    new(data['on_spotify'], data['publish_date'], archived: data['archived'])
+    new(data['on_spotify'], data['publish_date'], archived: data['archived'], name: data['name'])
   end
 end

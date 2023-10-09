@@ -171,17 +171,16 @@ class App
 
   def add_music_album
     print_prompt('add a music album')
-    # Handle user input
     on_spotify = ask_on_spotify
     publish_date = ask_publish_date
     archived = ask_archived
     genre = ask_genre
-    # Create a new music album
     new_music_album = MusicAlbum.new(on_spotify, publish_date, archived: archived)
-    # Set genre only when the user provided a genre
     add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
+
     @music_albums << new_music_album
     write_file(@music_albums, @music_album_store)
+
     @output.puts 'A music album is created successfully'
   end
 
