@@ -47,7 +47,8 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
     app.start
     heading = "_____LIST OF MUSIC ALBUM_____"
     _menu, list_of_albums = output.string.split(heading)
-    assert_equal 1, list_of_albums.strip.split("\n").count
+    albums = list_of_albums.strip.split("\n")
+    assert_match /0- name: Pop - id: \d+ - is published on 2020-01-01/, albums.first
   end
 
   it "when I add a music album in the genre of Rock and then list out all genres Rock should be in that list" do

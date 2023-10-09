@@ -157,7 +157,7 @@ class App
       nil
     else
       @music_albums.each_with_index do |music_album, index|
-        @output.puts "#{index}- Music id: #{music_album.id} - is published on #{music_album.publish_date}"
+        @output.puts "#{index}- name: #{music_album.name} - id: #{music_album.id} - is published on #{music_album.publish_date}"
       end
     end
   end
