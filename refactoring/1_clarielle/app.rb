@@ -171,11 +171,12 @@ class App
 
   def add_music_album
     print_prompt('add a music album')
+    name = ask_for_album_name
     on_spotify = ask_on_spotify
     publish_date = ask_publish_date
     archived = ask_archived
     genre = ask_genre
-    new_music_album = MusicAlbum.new(on_spotify, publish_date, archived: archived)
+    new_music_album = MusicAlbum.new(on_spotify, publish_date, archived: archived, name: name)
     add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
 
     @music_albums << new_music_album

@@ -10,7 +10,7 @@ require_relative "../app"
 #
 describe "App" do
   it "when I launch the app it will show me options" do
-    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
+    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
     music_album_store = StringIO.new
     genres_store = StringIO.new
@@ -29,12 +29,12 @@ describe "App" do
     10# Exit
 _____ADD A MUSIC ALBUM_____
 
-Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it archived? (y/n) What is the genre of the music album? A music album is created successfully)
+What is the album name? Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it archived? (y/n) What is the genre of the music album? A music album is created successfully)
     assert_equal output.string.strip, menu_and_output.strip
   end
 
   it "when I add a music album then that same album will show when I list all music albums" do
-    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
+    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
     music_album_store = StringIO.new
     genres_store = StringIO.new
@@ -51,7 +51,7 @@ Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it arc
   end
 
   it "when I add a music album in the genre of Rock and then list out all genres Rock should be in that list" do
-    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
+    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
     music_album_store = StringIO.new
     genres_store = StringIO.new

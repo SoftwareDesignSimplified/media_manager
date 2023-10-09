@@ -21,6 +21,11 @@ module MusicAlbumHelper
     end
   end
 
+  def ask_for_album_name
+    @output.print "What is the album name? "
+    @input.gets.chomp
+  end
+
   # Handle user input
   def ask_on_spotify
     @output.print 'Is it on Spotify? (y/n) '
