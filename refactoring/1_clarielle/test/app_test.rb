@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require "minitest/pride"
+require_relative "test_helper"
 require_relative "../app"
 
 # 1. What is the goal?
