@@ -25,9 +25,14 @@ class App
   attr_accessor :music_albums, :genres
   attr_reader :books
 
-  def initialize(input:, output:)
-    @music_album_store = File.open('./data/music_album.json', 'r+')
-    @genres_store = File.open('./data/genres.json', 'r+')
+  def initialize(
+    input:,
+    output:,
+    music_album_store: File.open('./data/music_album.json', 'r+'),
+    genres_store: File.open('./data/genres.json', 'r+')
+  )
+    @music_album_store = music_album_store
+    @genres_store = genres_store
 
     @music_albums = read_file_object(@music_album_store, 'MusicAlbum')
     @genres = read_file_object(@genres_store, 'Genre')

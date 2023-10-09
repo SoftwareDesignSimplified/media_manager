@@ -10,7 +10,9 @@ describe "App" do
   it "when I launch the app it will show me options" do
     input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
-    app = App.new(input: input, output: output)
+    music_album_store = StringIO.new
+    genres_store = StringIO.new
+    app = App.new(input: input, output: output, music_album_store: music_album_store, genres_store: genres_store)
     app.start
     menu_and_output = %(Please choose an option according to the numbers on the dashboard:
     1# List all books
@@ -32,7 +34,9 @@ Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it arc
   it "when I add a music album then that same album will show when I list all music albums" do
     input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
-    app = App.new(input: input, output: output)
+    music_album_store = StringIO.new
+    genres_store = StringIO.new
+    app = App.new(input: input, output: output, music_album_store: music_album_store, genres_store: genres_store)
     app.start
 
     input = StringIO.new("2")
