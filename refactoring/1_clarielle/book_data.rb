@@ -1,0 +1,2 @@
+class BookData
+end
