@@ -59,6 +59,6 @@ module MusicAlbumHelper
       music_album.add_genre(new_genre)
       genres << new_genre
     end
-    write_file(genres, './data/genres.json')
+    write_file(genres, @genres_store)
   end
 end

@@ -26,8 +26,12 @@ class App
   attr_reader :books
 
   def initialize(input:, output:)
-    @music_albums = read_file('./data/music_album.json', 'MusicAlbum')
-    @genres = read_file('./data/genres.json', 'Genre')
+    @music_album_store = File.open('./data/music_album.json', 'r+')
+    @genres_store = File.open('./data/genres.json', 'r+')
+
+    @music_albums = read_file_object(@music_album_store, 'MusicAlbum')
+    @genres = read_file_object(@genres_store, 'Genre')
+
     @game_actions = GameActions.new
     @books = []
     @labels = []
@@ -141,7 +145,7 @@ class App
 
   # List all the existing music albums
   def list_music_album
-    @music_albums = read_file('./data/music_album.json', 'MusicAlbum')
+    @music_albums = read_file_object(@music_album_store, 'MusicAlbum')
     title('list of music album')
     if @music_albums.empty?
       @output.puts 'No music album in the library'
@@ -155,7 +159,7 @@ class App
 
   # List all the existing genres
   def list_genres
-    @genres = read_file('./data/genres.json', 'Genre')
+    @genres = read_file_object(@genres_store, 'Genre')
     title('list of genre')
     @genres.each_with_index { |genre, index| @output.puts "#{index} - #{genre.name}" }
   end
@@ -172,7 +176,7 @@ class App
     # Set genre only when the user provided a genre
     add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
     @music_albums << new_music_album
-    write_file(@music_albums, './data/music_album.json')
+    write_file(@music_albums, @music_album_store)
     @output.puts 'A music album is created successfully'
   end
 

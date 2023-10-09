@@ -8,7 +8,7 @@ require_relative "../app"
 # 2. Get the code working!
 describe "App" do
   it "when I launch the app it will show me options" do
-    input = StringIO.new("8\ny\n2020-01-01\ny\nrock")
+    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
     app = App.new(input: input, output: output)
     app.start
@@ -27,5 +27,20 @@ _____ADD A MUSIC ALBUM_____
 
 Is it on Spotify? (y/n) What is the date of publication? (YYYY-MM-DD-) Is it archived? (y/n) What is the genre of the music album? A music album is created successfully)
     assert_equal output.string.strip, menu_and_output.strip
+  end
+
+  it "when I add a music album then that same album will show when I list all music albums" do
+    input = StringIO.new("8\ny\n2020-01-01\ny\nRock")
+    output = StringIO.new
+    app = App.new(input: input, output: output)
+    app.start
+
+    input = StringIO.new("2")
+    output = StringIO.new
+    app = App.new(input: input, output: output)
+    app.start
+    heading = "_____LIST OF MUSIC ALBUM_____"
+    _menu, list_of_albums = output.string.split(heading)
+    assert_equal 1, list_of_albums.strip.split("\n").count
   end
 end
