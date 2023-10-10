@@ -176,7 +176,7 @@ class App
     publish_date = ask_publish_date
     archived = ask_archived
     genre = ask_genre
-    new_music_album = MusicAlbum.new(on_spotify, publish_date, archived: archived, name: name)
+    new_music_album = MusicAlbum.new(on_spotify:, publish_date:, archived:, name:)
     add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
 
     @music_albums << new_music_album

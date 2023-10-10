@@ -5,7 +5,7 @@ class MusicAlbum < Item
   # @param {Boolean} on_spotify
   # @param {String} publish_date
   # @param {Boolean} archived
-  def initialize(on_spotify, publish_date, archived: false, name: "")
+  def initialize(on_spotify:, publish_date:, archived: false, name: "")
     super(publish_date, archived)
     @on_spotify = on_spotify
     @name = name
@@ -35,6 +35,6 @@ class MusicAlbum < Item
   # @return {MusicAlbum}
   def self.from_json(string)
     data = JSON.parse(string)
-    new(data['on_spotify'], data['publish_date'], archived: data['archived'], name: data['name'])
+    new(on_spotify: data['on_spotify'], publish_date: data['publish_date'], archived: data['archived'], name: data['name'])
   end
 end

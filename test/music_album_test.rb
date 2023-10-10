@@ -5,7 +5,7 @@ require 'json'
 
 describe 'Music Album' do
   it 'can serialize itself to json' do
-    album = MusicAlbum.new(true, '2011-01-01', archived: true)
+    album = MusicAlbum.new(on_spotify: true, publish_date: '2011-01-01', archived: true)
     json = album.to_json({})
     parsed_album = JSON.parse(json)
     assert_equal ({
@@ -17,7 +17,7 @@ describe 'Music Album' do
   end
 
   it 'can be supplied with a name' do
-    album = MusicAlbum.new(true, '2011-01-01', archived: true, name: 'Pop')
+    album = MusicAlbum.new(on_spotify: true, publish_date: '2011-01-01', archived: true, name: 'Pop')
     json = album.to_json({})
     parsed_album = JSON.parse(json)
     assert_equal 'Pop', parsed_album.fetch('name')
