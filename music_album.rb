@@ -11,6 +11,14 @@ class MusicAlbum < Item
     @name = name
   end
 
+  def on_spotify?
+    @on_spotify
+  end
+
+  def archived?
+    @archived
+  end
+
   # @override
   # @return true if parent's method returns true AND if on_spotify equals true
   def can_be_archived?
