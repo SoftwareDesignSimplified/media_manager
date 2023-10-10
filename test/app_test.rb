@@ -27,20 +27,13 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
   end
 
   it 'when I add a music album then that same album will show when I list all music albums' do
-    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
-    output = StringIO.new
     music_album_store = StringIO.new
     genres_store = StringIO.new
-    app = App.new(input:, output:, music_album_store:, genres_store:)
-    app.start
+    add_music_album(name: 'Pop', publish_date: '2020-01-01', music_album_store:, genres_store:)
 
-    input = StringIO.new('2')
-    output = StringIO.new
-    app = App.new(input:, output:, music_album_store:, genres_store:)
-    app.start
-    heading = '_____LIST OF MUSIC ALBUM_____'
-    _menu, list_of_albums = output.string.split(heading)
-    albums = list_of_albums.strip.split("\n")
+    albums = list_music_albums(music_album_store:, genres_store:)
+
+    assert_equal 1, albums.count
     assert_match(/0- name: Pop - id: \d+ - is published on 2020-01-01/, albums.first)
   end
 
@@ -60,4 +53,25 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
     _menu, list_of_genres = output.string.split(heading)
     assert_equal 1, list_of_genres.strip.split("\n").count
   end
+  
+  private
+
+  def add_music_album(name:, publish_date:, music_album_store:, genres_store:)
+    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
+    output = StringIO.new
+    app = App.new(input:, output:, music_album_store:, genres_store:)
+    app.start
+    app
+  end
+
+  def list_music_albums(music_album_store:, genres_store:)
+    input = StringIO.new('2')
+    output = StringIO.new
+    app = App.new(input:, output:, music_album_store:, genres_store:)
+    app.start
+    heading = '_____LIST OF MUSIC ALBUM_____'
+    _menu, list_of_albums = output.string.split(heading)
+    list_of_albums.strip.split("\n")
+  end
+
 end
