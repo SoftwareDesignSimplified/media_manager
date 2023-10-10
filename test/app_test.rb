@@ -38,26 +38,18 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
   end
 
   it 'when I add a music album in the genre of Rock and then list out all genres Rock should be in that list' do
-    input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
-    output = StringIO.new
     music_album_store = StringIO.new
     genres_store = StringIO.new
-    app = App.new(input:, output:, music_album_store:, genres_store:)
-    app.start
+    add_music_album(genre: 'Rock', music_album_store:, genres_store:)
 
-    input = StringIO.new('4')
-    output = StringIO.new
-    app = App.new(input:, output:, music_album_store:, genres_store:)
-    app.start
-    heading = '_____LIST OF GENRE_____'
-    _menu, list_of_genres = output.string.split(heading)
-    assert_equal 1, list_of_genres.strip.split("\n").count
-    assert_equal "0 - Rock", list_of_genres.strip.split("\n").first
+    genres = list_genres(music_album_store:, genres_store:)
+
+    assert_equal ["0 - Rock"], genres
   end
   
   private
 
-  def add_music_album(name:, publish_date:, music_album_store:, genres_store:)
+  def add_music_album(name: 'Pop', publish_date: '2020-01-01', genre: 'Rock', music_album_store:, genres_store:)
     input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
     output = StringIO.new
     app = App.new(input:, output:, music_album_store:, genres_store:)
@@ -75,4 +67,13 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
     list_of_albums.strip.split("\n")
   end
 
+  def list_genres(music_album_store:, genres_store:)
+    input = StringIO.new('4')
+    output = StringIO.new
+    app = App.new(input:, output:, music_album_store:, genres_store:)
+    app.start
+    heading = '_____LIST OF GENRE_____'
+    _menu, list_of_genres = output.string.split(heading)
+    list_of_genres.strip.split("\n")
+  end
 end
