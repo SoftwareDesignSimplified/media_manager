@@ -52,6 +52,7 @@ What is the album name? Is it on Spotify? (y/n) What is the date of publication?
     heading = '_____LIST OF GENRE_____'
     _menu, list_of_genres = output.string.split(heading)
     assert_equal 1, list_of_genres.strip.split("\n").count
+    assert_equal "0 - Rock", list_of_genres.strip.split("\n").first
   end
   
   private
