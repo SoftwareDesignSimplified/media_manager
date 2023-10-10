@@ -1,5 +1,5 @@
 require_relative './item'
-require_relative './music'
+require_relative './music_album'
 require_relative './genre'
 require_relative './io'
 require_relative './music_album_helper'
