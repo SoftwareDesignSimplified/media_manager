@@ -1,13 +1,6 @@
 require_relative 'test_helper'
 require_relative '../app'
 
-# 1. What is the goal?
-# Change the add an album so that it uses the Spotify API
-#
-# 2. Get the code working!
-#
-# 3. Wrapped tests around it
-#
 describe 'App' do
   it 'when I launch the app it will show me options' do
     input = StringIO.new("8\nPop\ny\n2020-01-01\ny\nRock")
