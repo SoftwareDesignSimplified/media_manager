@@ -6,22 +6,27 @@ require 'json'
 describe 'Music Album' do
   it 'can serialize itself to json' do
     album = MusicAlbum.new(on_spotify: true, publish_date: '2011-01-01', archived: true)
-
-    actual = parsed_from_json(album.to_json).slice('publish_date', 'archived', 'genre_id', 'on_spotify')
-    expected = ({
+    actual = album
+             .to_json
+             .then(&parse)
+             .slice('publish_date', 'archived', 'genre_id', 'on_spotify')
+    expected = {
       'publish_date' => '2011-01-01',
       'archived' => true,
       'genre_id' => nil,
       'on_spotify' => true
-    })
+    }
     assert_equal expected, actual
   end
 
   it 'can be supplied with a name' do
     album = MusicAlbum.new(on_spotify: true, publish_date: '2011-01-01', archived: true, name: 'Pop')
-    json = album.to_json
-    parsed_album = JSON.parse(json)
-    assert_equal 'Pop', parsed_album.fetch('name')
+    actual = album
+             .to_json
+             .then(&parse)
+             .fetch('name')
+    expected = 'Pop'
+    assert_equal expected, actual
   end
 
   it 'can be parsed from JSON when we supply a name' do
@@ -38,7 +43,7 @@ describe 'Music Album' do
 
   private
 
-  def parsed_from_json(json)
-    JSON.parse(json)
+  def parse
+    ->(json) { JSON.parse(json) }
   end
 end
