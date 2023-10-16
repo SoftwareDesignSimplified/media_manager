@@ -1,3 +1,6 @@
+require 'dotenv/load'
+require 'bundler/setup'
+require 'rspotify'
 require_relative './item'
 require_relative './music_album'
 require_relative './genre'
@@ -42,6 +45,9 @@ class App
     @labels = []
     @input = input
     @output = output
+    # Switch out to different fetcher
+    # @fetcher = FetchAlbumDataFromUser.new(input: @input, output: @output)
+    @fetcher = FetchAlbumDataFromSpotify.new(input: @input, output: @output)
   end
 
   # Title of each option when executed
@@ -169,15 +175,63 @@ class App
     @genres.each_with_index { |genre, index| @output.puts "#{index} - #{genre.name}" }
   end
 
-  def add_music_album
-    print_prompt('add a music album')
+  class FetchAlbumDataFromSpotify
+    include MusicAlbumHelper
+
+    def initialize(input:, output:)
+      @input = input
+      @output = output
+      RSpotify.authenticate(ENV.fetch('SPOTIFY_CLIENT_ID'), ENV.fetch('SPOTIFY_CLIENT_SECRET'))
+    end
+
+    def call
+      name = ask_for_album_name
+      result = RSpotify::Album.search(name).first
+      genre = RSpotify::Artist.find(result.artists.first.id).genres.last
+      { name: result.name, on_spotify: 'y', publish_date: result.release_date, archived: 'n', genre: genre }
+    end
+  end
+
+  class FetchAlbumDataFromUser
+    include MusicAlbumHelper
+
+    def initialize(input:, output:)
+      @input = input
+      @output = output
+    end
+
+    def call
+      name = ask_for_album_name
+      on_spotify = ask_on_spotify
+      publish_date = ask_publish_date
+      archived = ask_archived
+      genre = ask_genre
+      { name:, on_spotify:, publish_date:, archived:, genre:}
+    end
+  end
+
+  def fetch_album_data_from_user
     name = ask_for_album_name
     on_spotify = ask_on_spotify
     publish_date = ask_publish_date
     archived = ask_archived
     genre = ask_genre
-    new_music_album = MusicAlbum.new(on_spotify:, publish_date:, archived:, name:)
-    add_genre_to_music_album(@genres, new_music_album, genre) unless genre.empty?
+    { name:, on_spotify:, publish_date:, archived:, genre:}
+  end
+
+  def add_music_album
+    print_prompt('add a music album')
+
+    album_data = @fetcher.call
+
+    new_music_album = MusicAlbum.new(
+      on_spotify: album_data.fetch(:on_spotify),
+      publish_date: album_data.fetch(:publish_date),
+      archived: album_data.fetch(:archived),
+      name: album_data.fetch(:name),
+    )
+
+    add_genre_to_music_album(@genres, new_music_album, album_data.fetch(:genre)) unless album_data.fetch(:genre).empty?
 
     @music_albums << new_music_album
     write_file(@music_albums, @music_album_store)
